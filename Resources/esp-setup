@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# Use latest Swift toolchain
+export TOOLCHAINS=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' $HOME/Library/Developer/Toolchains/swift-latest.xctoolchain/Info.plist)
+
+# Make Espressif tools available
+selected=$(jq ".idfSelectedId" $HOME/.espressif/esp_idf.json)
+idf_path=$(jq --raw-output ".idfInstalled.[$selected].path" $HOME/.espressif/esp_idf.json)
+. $idf_path/export.sh
+
+# Select target
+export IDF_TARGET=esp32c6
+
+###############################
+
+# Update with connected device
+export ESPPORT=/dev/cu.usbmodem1101
+
+# Add to ~/.zshrc
+# alias esp-setup=". $HOME/esp/esp-setup"
